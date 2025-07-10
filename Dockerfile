@@ -34,4 +34,4 @@ CMD ["/bin/bash", "./start_nnunet.sh" ]
 
 # Commands:
 # docker build -t nnunetv1:heart --build-arg TASK_NAME=Task002_Heart --build-arg CUDA_VERSION=cuda11 --build-arg BASE_VERSION=3.10 .
-# docker run -v /home/a178n/DKFZ/eucaim_work/test_input:/home/chaimeleon/nnUNet_input -v /home/a178n/DKFZ/eucaim_work/test_out:/home/chaimeleon/nnUNet_output --gpus all nnunetv1:heart 
+# docker run -v <host/input_dir/>:/home/chaimeleon/nnUNet_input -v <host/output_dir/>:/home/chaimeleon/nnUNet_output --gpus all nnunetv1:heart 

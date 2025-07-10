@@ -1,3 +1,8 @@
+# Dockerfile for nnUNet task-based images
+# Author: Ashis Ravindran, DKFZ
+# Builds image prebuilt ubuntu-python-pytorch image provided by the CHAIMELEON project.
+# See https://github.com/chaimeleon-eu/workstation-images for more details.
+
 ARG CUDA_VERSION=""
 ARG BASE_VERSION="unknown"
 FROM harbor.chaimeleon-eu.i3m.upv.es/chaimeleon-library-batch/ubuntu-python-pytorch:${BASE_VERSION}${CUDA_VERSION}

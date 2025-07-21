@@ -13,12 +13,12 @@ LABEL image.version="tag-or-version"
 ENV PYTHONUNBUFFERED=1
 
 # Set defaults for build arguments
-ARG USER_UID=1000
-ARG USER_GID=1000
+ARG USER_UID=2323
+ARG USER_GID=2323
 
 # Create non-root user and group, and prevent login
 RUN groupadd -g $USER_GID eucaim && \
-    useradd -r -u $USER_GID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
+    useradd -l -r -u $USER_GID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
     python3 \
@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # Install PyTorch+CUDA
-RUN pip install --upgrade pip && \
-    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu118
 
 WORKDIR /app
 RUN mkdir -p nnunetv1
@@ -43,7 +43,7 @@ COPY nnUNet nnunetv1
 RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh
 
 # Install nnU-Net
-RUN pip3 install -e ./nnunetv1
+RUN pip3 install --no-cache-dir -e ./nnunetv1
 
 # Switch to eucaim user
 USER eucaim

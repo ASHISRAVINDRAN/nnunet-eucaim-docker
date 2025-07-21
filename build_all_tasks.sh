@@ -3,7 +3,13 @@
 # List TASK_NAMES here
 TASK_NAMES=(
   Task002_Heart
+  Task003_Liver
   Task004_Hippocampus
+  Task006_Lung
+  Task007_Pancreas
+  Task008_HepaticVessel
+  Task009_Spleen
+  Task010_Colon
 )
 
 # User UID and Group ID defaults

@@ -17,7 +17,7 @@ ENV TASK_NAME=$TASK_NAME
 RUN nnUNet_download_pretrained_model $TASK_NAME
 
 CMD ["/bin/bash", "/app/start_nnunet.sh" ]
-#HEALTHCHECK --interval=60s --timeout=10s --retries=3 CMD python /app/healthcheck.py || exit 1
+HEALTHCHECK --interval=60s --timeout=10s --retries=3 CMD python /app/health_check.py || exit 1
 
 # Commands:
 # docker build -t nnunet:heart --build-arg TASK_NAME=Task002_Heart .

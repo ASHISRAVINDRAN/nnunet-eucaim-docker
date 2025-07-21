@@ -38,6 +38,7 @@ RUN mkdir -p nnunetv1
 
 # Copy relevant files
 COPY start_nnunet.sh ./start_nnunet.sh
+COPY health_check.py ./health_check.py
 COPY nnUNet nnunetv1
 
 RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh

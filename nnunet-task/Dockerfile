@@ -3,6 +3,7 @@
 # Builds image nnunet:base
 FROM nnunet:base
 ARG TASK_NAME
+ARG MULTI_MODAL=False
 
 # Maintainer information
 LABEL maintainer="ashis.ravindran@dkfz-heidelberg.de"
@@ -14,6 +15,7 @@ LABEL image.version="tag-or-version"
 
 USER eucaim
 ENV TASK_NAME=$TASK_NAME
+ENV MULTI_MODAL=$MULTI_MODAL
 RUN nnUNet_download_pretrained_model $TASK_NAME
 
 CMD ["/bin/bash", "/app/start_nnunet.sh" ]

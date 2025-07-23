@@ -2,9 +2,11 @@
 
 # List TASK_NAMES here
 TASK_NAMES=(
+  Task001_BrainTumour 
   Task002_Heart
   Task003_Liver
   Task004_Hippocampus
+  Task005_Prostate
   Task006_Lung
   Task007_Pancreas
   Task008_HepaticVessel
@@ -27,9 +29,17 @@ echo "nnUNet base image build finshed"
 for TASK_NAME in "${TASK_NAMES[@]}"; do
   echo "Building image for: $TASK_NAME"
   
-  docker build \
-    --build-arg TASK_NAME=$TASK_NAME \
-    -t "nnunet:${TASK_NAME}" nnunet-task/
-    
+  BUILD_CMD="docker build --build-arg TASK_NAME=$TASK_NAME"
+
+  case "$TASK_NAME" in
+    Task001_Brain|Task005_Prostate)
+    BUILD_CMD+=" --build-arg MULTI_MODAL=True"
+      ;;
+  esac
+
+  # Finalize and run the build command
+  BUILD_CMD+=" -t nnunet:${TASK_NAME} nnunet-task/"
+  eval $BUILD_CMD
+
   echo "Building finshed for image: $TASK_NAME"
 done

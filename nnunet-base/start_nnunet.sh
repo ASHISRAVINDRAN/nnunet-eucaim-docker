@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$MULTI_MODAL" == "False" ]]; then
+if [[ "$MULTI_MODAL" == False ]]; then
     # modify filename as nnUNet for mono-modal Nifti data
     for file in "$nnUNet_input"/*.nii.gz; do
         filename=$(basename "$file")

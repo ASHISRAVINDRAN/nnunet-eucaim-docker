@@ -1,0 +1,41 @@
+{
+  "name": "nnUNet Inference",
+  "tool-version": "1.7.0",
+  "description": "Run nnUNet prediction for Task002_Heart using a Docker container",
+  "author": "Ashis Ravindran",
+  "schema-version": "0.5",
+  "command-line": "nnUNet_predict -i /image/nnUNet_input -o /image/nnUNet_output -t Task00X_XX* -m 3d_fullres",
+  "container-image": {
+    "type": "docker",
+    "image": "nnunet:Task00X_XX*"
+  },
+  "inputs": [
+    {
+      "id": "input_folder",
+      "name": "Input Directory",
+      "type": "Directory",
+      "description": "Host path containing input NIfTI files",
+      "value-key": "/image/nnUNet_input",
+      "path-template": "input"
+    },
+    {
+      "id": "output_folder",
+      "name": "Output Directory",
+      "type": "Directory",
+      "description": "Host path to store nnUNet predictions",
+      "value-key": "/image/nnUNet_output",
+      "path-template": "output"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "predicted_segmentations",
+      "name": "Predicted Segmentations",
+      "description": "NIfTI output files",
+      "path-template": "/image/nnUNet_output/*.nii.gz"
+    }
+  ],
+  "custom": {
+    "gpu": true
+  }
+}

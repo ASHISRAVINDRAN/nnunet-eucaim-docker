@@ -4,7 +4,7 @@ This repository provides Docker images for running [nnUNet](https://github.com/M
 
 ---
 
-## 🛠️ Setup
+## Setup
 
 To build all task-specific nnUNet images, run:
 
@@ -53,5 +53,6 @@ The user must provide input files named according to the expected modality forma
 For detailed guidelines, refer to the [nnUNet data format documentation](https://github.com/MIC-DKFZ/nnUNet/blob/nnunetv1/documentation/data_format_inference.md).
 
 
-
+## Notes
+A patched version nnUNet source is placed in the `nnunet-base` folder for installation purposes at build time. As soon as the issue https://github.com/MIC-DKFZ/nnUNet/issues/2876 is fixed, direct git clone from official would be possible.
 

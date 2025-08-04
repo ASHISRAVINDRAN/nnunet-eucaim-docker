@@ -2,7 +2,7 @@ import os, sys
 
 def is_healthy():
     try:
-        log_file = "/home/eucaim/nnUNet_output/plans.pkl"
+        log_file = "/home/eucaim/nnUNet_output/tmp/plans.pkl"
         if os.path.exists(log_file): # process started
             return True
     except Exception as e:

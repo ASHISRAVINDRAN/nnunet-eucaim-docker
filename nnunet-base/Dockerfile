@@ -21,8 +21,35 @@ RUN groupadd -g $USER_GID eucaim && \
     useradd -l -r -u $USER_GID -g eucaim -d /home/eucaim -m -s /usr/sbin/nologin eucaim
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
+    git \
     python3 \
     python3-pip \
+    libx11-6 \ 
+    ca-certificates \
+    linux-libc-dev \
+    libtiff5-dev \
+    libwrap0-dev \
+    libxcomposite1 \
+    libxcursor1 \
+    libxi-dev \
+    libxkbcommon-x11-0 \
+    mesa-common-dev \
+    libssl-dev \
+    libglu1-mesa-dev \
+    libxt-dev \
+    libgomp1 \
+    qtbase5-dev \
+    qtscript5-dev \
+    libqt5svg5-dev \
+    libqt5opengl5-dev \
+    libqt5xmlpatterns5-dev \
+    qtwebengine5-dev \
+    qttools5-dev \
+    libqt5x11extras5-dev \
+    qtxmlpatterns5-dev-tools \
+    libqt5webengine-data \
+    at-spi2-core \
+    libxcb-cursor0 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,18 +59,25 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 # Install PyTorch+CUDA
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu118
+    
+RUN pip install --no-cache-dir pydicom==3.0.1 SimpleITK==2.5.2
 
 WORKDIR /app
-RUN mkdir -p nnunetv1
+RUN mkdir -p nnunetv1 scripts mitk
+
+# Clone nnU-Net v1
+RUN git clone --branch nnunetv1 https://github.com/MIC-DKFZ/nnUNet.git ./nnunetv1
 
 # Copy relevant files
 COPY start_nnunet.sh ./start_nnunet.sh
-COPY health_check.py ./health_check.py
-COPY nnUNet nnunetv1
+COPY nnunetv1.patch ./nnunetv1/nnunetv1.patch
+COPY scripts scripts
+COPY MITK-snapshots_2025-06-25-linux-x86_64 mitk
 
 RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh
 
 # Install nnU-Net
+RUN cd nnunetv1 && git apply --ignore-space-change --ignore-whitespace nnunetv1.patch
 RUN pip3 install --no-cache-dir -e ./nnunetv1
 
 # Switch to eucaim user

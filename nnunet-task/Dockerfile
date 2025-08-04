@@ -19,7 +19,7 @@ ENV MULTI_MODAL=$MULTI_MODAL
 RUN nnUNet_download_pretrained_model $TASK_NAME
 
 CMD ["/bin/bash", "/app/start_nnunet.sh" ]
-HEALTHCHECK --interval=60s --timeout=10s --retries=3 CMD python /app/health_check.py || exit 1
+HEALTHCHECK --interval=60s --timeout=10s --retries=3 CMD python /app/scripts/health_check.py || exit 1
 
 # Commands:
 # docker build -t nnunet:heart --build-arg TASK_NAME=Task002_Heart .

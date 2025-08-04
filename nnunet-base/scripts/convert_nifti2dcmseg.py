@@ -1,53 +1,22 @@
 import shutil
 import os
 import json
-import random
 from pathlib import Path
-import SimpleITK as sitk
-import numpy as np
 from subprocess import PIPE, run
 from os.path import join, exists
+import generate_json
 
 execution_timeout = 1200
 convert_to = ".dcm"
 dataset_dir = os.getenv("nnUNet_output")
 nnunet_input_dir = os.getenv("nnUNet_input")
 
-def _count_labels_in_nifti(nifti_path):
-    nifti_image = sitk.ReadImage(nifti_path)
-    data = sitk.GetArrayFromImage(nifti_image)
-    unique_labels = np.unique(data)
-    labels = unique_labels[unique_labels != 0]  # Exclude background (0)
-    return len(labels)
-
-def update_mitk_json_object(json_dict: Path):
-    def random_color():
-        return [random.random(), random.random(), random.random()]
-    file = json_dict['groups'][0]['_file']
-
-    n_labels = _count_labels_in_nifti(file)
-    print("Number of labels:", n_labels)
-    labels = [
-        {
-            "color": random_color(),
-            "locked": True,
-            "name": f"Label {label}",
-            "opacity": 0.6,
-            "tracking_id": str(label),
-            "value": label,
-            "visible": True
-        }
-        for label in range(1, n_labels + 1)
-    ]
-    json_dict['groups'][0]['labels'] = labels
-
-
 def convert_to_dcmseg(json_file_path: Path):
     with open(json_file_path, 'r') as f:
         json_dict = json.load(f)
 
     #add labels info into the json dict
-    update_mitk_json_object(json_dict)
+    generate_json.update_mitk_json_labels_property(json_dict)
 
     # write back with label info
     with open(json_file_path, 'w') as file:

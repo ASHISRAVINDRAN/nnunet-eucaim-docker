@@ -68,7 +68,6 @@ def create_mitklabel_json(file: str, dicom_folder_path: str, output_json_path: s
             "z": 0
         }]
     }
-
     temporo_spatial["DICOM.0008.103E"] = {    # hardcoded tags
         "values": [{
             "t": 0,
@@ -76,7 +75,6 @@ def create_mitklabel_json(file: str, dicom_folder_path: str, output_json_path: s
             "z": 0
         }]
     }
-
     temporo_spatial["DICOM.0070.0084"] = {    # hardcoded tags
         "values": [{
             "t": 0,
@@ -117,30 +115,33 @@ def update_mitk_json_labels_property(json_dict: Path):
         return [random.random(), random.random(), random.random()]
     file = json_dict['groups'][0]['_file']
     n_labels = _count_labels_in_nifti(file)
-    print("Number of labels:", n_labels)
-    labels = [
-        {
-            "DICOM.0062.0002.0062.0008":
-                {
-                    "type": "TemporoSpatialStringProperty",
-                    "value": {
-                        "values": [
-                            {
-                                "t": 0,
-                                "value": "AUTOMATIC",
-                                "z": 0
-                            }
-                        ]
-                    }
-                },
-            "color": random_color(),
-            "locked": True,
-            "name": f"Label {label}",
-            "opacity": 0.6,
-            "tracking_id": str(label),
-            "value": label,
-            "visible": True   
-        }
-        for label in range(1, n_labels + 1)
-    ]
-    json_dict['groups'][0]['labels'] = labels
+    if n_labels > 0:
+        labels = [
+            {
+                "DICOM.0062.0002.0062.0008":
+                    {
+                        "type": "TemporoSpatialStringProperty",
+                        "value": {
+                            "values": [
+                                {
+                                    "t": 0,
+                                    "value": "AUTOMATIC",
+                                    "z": 0
+                                }
+                            ]
+                        }
+                    },
+                "color": random_color(),
+                "locked": True,
+                "name": f"Label {label}",
+                "opacity": 0.6,
+                "tracking_id": str(label),
+                "value": label,
+                "visible": True   
+            }
+            for label in range(1, n_labels + 1)
+        ]
+        json_dict['groups'][0]['labels'] = labels
+        return True
+    else:
+        return False

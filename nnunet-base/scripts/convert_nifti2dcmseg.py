@@ -14,19 +14,24 @@ nnunet_input_dir = os.getenv("nnUNet_input")
 def convert_to_dcmseg(json_file_path: Path):
     with open(json_file_path, 'r') as f:
         json_dict = json.load(f)
-
+    file = Path(json_dict['groups'][0]['_file'])
+    file_id = Path(file.stem).stem
     #add labels info into the json dict
-    generate_json.update_mitk_json_labels_property(json_dict)
+    if not generate_json.update_mitk_json_labels_property(json_dict):
+        print('###########################')
+        print('No segmentations were produced, skipping:', file_id)
+        print('###########################')
+        return
 
     # write back with label info
     with open(json_file_path, 'w') as file:
         json.dump(json_dict, file, indent=4)
 
     # get nifti file name
-    file = Path(json_dict['groups'][0]['_file'])
+   
     output_filepath = json_file_path.parent.parent
     dcm_output_filepath = join(
-        output_filepath, Path(file.stem).stem + convert_to
+        output_filepath, file_id + convert_to
     )
     if not exists(dcm_output_filepath):
         command = [

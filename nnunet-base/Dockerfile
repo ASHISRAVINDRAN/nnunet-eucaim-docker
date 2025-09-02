@@ -22,6 +22,7 @@ RUN groupadd -g $USER_GID eucaim && \
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
     git \
+    wget \
     python3 \
     python3-pip \
     libx11-6 \ 
@@ -65,6 +66,10 @@ RUN pip install --no-cache-dir pydicom==3.0.1 SimpleITK==2.5.2
 WORKDIR /app
 RUN mkdir -p nnunetv1 scripts mitk
 
+RUN wget --no-check-certificate https://github.com/MITK/MITK/releases/download/v2025.08/MITK-v2025.08-ubuntu_22_04-x86_64.tar.gz -O /app/mitk.tar.gz \
+    && tar -xzf /app/mitk.tar.gz --strip 1 -C /app/mitk/ MITK-v2025.08-linux-x86_64 \
+    && rm -rf /app/mitk.tar.gz
+
 # Clone nnU-Net v1
 RUN git clone --branch nnunetv1 https://github.com/MIC-DKFZ/nnUNet.git ./nnunetv1
 
@@ -72,7 +77,6 @@ RUN git clone --branch nnunetv1 https://github.com/MIC-DKFZ/nnUNet.git ./nnunetv
 COPY start_nnunet.sh ./start_nnunet.sh
 COPY nnunetv1.patch ./nnunetv1/nnunetv1.patch
 COPY scripts scripts
-COPY MITK-snapshots_2025-06-25-linux-x86_64 mitk
 
 RUN chown -R root:root /app && chmod 755 ./start_nnunet.sh
 

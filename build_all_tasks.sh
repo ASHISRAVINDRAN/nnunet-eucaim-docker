@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# !! This is not relevant for EUCAIM !!!
 # List TASK_NAMES here
 TASK_NAMES=(
   Task001_BrainTumour 
